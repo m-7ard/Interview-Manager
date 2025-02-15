@@ -8,20 +8,20 @@ install_dependencies:
   image: node:16
   script:
     - cd frontend
-    - npm install  # Install all dependencies
-  cache:
-    key: npm-cache  # Unique cache key to reuse across jobs
+    - npm install
+  artifacts:
     paths:
-      - frontend/node_modules/  # Cache node_modules for later jobs
+      - frontend/node_modules/
+    expire_in: 1 hour  # Optional: limit storage time
 
 run_tests:
   stage: test
   image: node:16
+  dependencies:
+    - install_dependencies  # Ensure this job depends on the install step
   script:
     - cd frontend
-    - npm test -- --ci --silent --coverage  # Now Jest should be available
-  cache:
-    key: npm-cache  # Use the same cache to ensure node_modules is available
+    - npm run test -- --ci --silent --coverage
 
 # Build the project
 build_project:
