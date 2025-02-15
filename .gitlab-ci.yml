@@ -17,7 +17,7 @@ run_tests:
   image: node:16
   script:
     - cd frontend           # Navigate to the 'frontend' folder
-    - npm test -- --ci --silent --coverage  # Run tests (adjust flags as needed)
+    - npm run test -- --ci --silent --coverage  # Run tests (adjust flags as needed)
 
 # This job builds the React project (optional if you want to deploy it)
 build_project:
