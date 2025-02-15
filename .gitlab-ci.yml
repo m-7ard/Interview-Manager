@@ -3,30 +3,37 @@ stages:
   - test
   - build
 
-# This job installs dependencies using npm
+# Install dependencies
 install_dependencies:
   stage: install
-  image: node:16 # Choose the appropriate Node.js version for your project
+  image: node:16
   script:
-    - cd frontend           # Navigate to the 'frontend' folder
-    - npm install            # Install dependencies in the 'frontend' directory
+    - cd frontend
+    - npm install  # Install dependencies, including Jest
+  cache:
+    paths:
+      - frontend/node_modules/  # Cache the node_modules directory
 
-# This job runs the tests using npm
+# Run tests and generate coverage report
 run_tests:
   stage: test
   image: node:16
   script:
     - cd frontend
-    - npm install  # Install dependencies, including Jest
     - npm test -- --ci --silent --coverage  # Run tests with coverage
+  coverage: '/^Test Suites: \d+ passed, \d+ failed, \d+ total \(\d+% covered\)$/'
+  artifacts:
+    paths:
+      - frontend/coverage
+    expire_in: 1 hour  # Optional: set an expiration for artifacts
 
-# This job builds the React project (optional if you want to deploy it)
+# Build the project
 build_project:
   stage: build
   image: node:16
   script:
-    - cd frontend           # Navigate to the 'frontend' folder
-    - npm run build          # Build the project (for production)
+    - cd frontend
+    - npm run build
   artifacts:
     paths:
-      - frontend/build       # Save the build artifacts to the pipeline
+      - frontend/build
