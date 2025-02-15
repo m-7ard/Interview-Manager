@@ -1,0 +1,31 @@
+stages:
+  - install
+  - test
+  - build
+
+# This job installs dependencies using npm
+install_dependencies:
+  stage: install
+  image: node:16 # Choose the appropriate Node.js version for your project
+  script:
+    - cd frontend           # Navigate to the 'frontend' folder
+    - npm install            # Install dependencies in the 'frontend' directory
+
+# This job runs the tests using npm
+run_tests:
+  stage: test
+  image: node:16
+  script:
+    - cd frontend           # Navigate to the 'frontend' folder
+    - npm test -- --ci --silent --coverage  # Run tests (adjust flags as needed)
+
+# This job builds the React project (optional if you want to deploy it)
+build_project:
+  stage: build
+  image: node:16
+  script:
+    - cd frontend           # Navigate to the 'frontend' folder
+    - npm run build          # Build the project (for production)
+  artifacts:
+    paths:
+      - frontend/build       # Save the build artifacts to the pipeline
