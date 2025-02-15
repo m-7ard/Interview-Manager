@@ -3,29 +3,25 @@ stages:
   - test
   - build
 
-# Install dependencies
 install_dependencies:
   stage: install
   image: node:16
   script:
     - cd frontend
-    - npm install  # Install dependencies, including Jest
+    - npm install  # Install all dependencies
   cache:
+    key: npm-cache  # Unique cache key to reuse across jobs
     paths:
-      - frontend/node_modules/  # Cache the node_modules directory
+      - frontend/node_modules/  # Cache node_modules for later jobs
 
-# Run tests and generate coverage report
 run_tests:
   stage: test
   image: node:16
   script:
     - cd frontend
-    - npm test -- --ci --silent --coverage  # Run tests with coverage
-  coverage: '/^Test Suites: \d+ passed, \d+ failed, \d+ total \(\d+% covered\)$/'
-  artifacts:
-    paths:
-      - frontend/coverage
-    expire_in: 1 hour  # Optional: set an expiration for artifacts
+    - npm test -- --ci --silent --coverage  # Now Jest should be available
+  cache:
+    key: npm-cache  # Use the same cache to ensure node_modules is available
 
 # Build the project
 build_project:
