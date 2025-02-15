@@ -16,8 +16,9 @@ run_tests:
   stage: test
   image: node:16
   script:
-    - cd frontend           # Navigate to the 'frontend' folder
-    - npm run test # Run tests (adjust flags as needed)
+    - cd frontend
+    - npm install  # Install dependencies, including Jest
+    - npm test -- --ci --silent --coverage  # Run tests with coverage
 
 # This job builds the React project (optional if you want to deploy it)
 build_project:
