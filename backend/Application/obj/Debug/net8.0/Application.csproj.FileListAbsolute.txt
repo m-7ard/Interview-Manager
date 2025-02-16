@@ -1,0 +1,12 @@
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\bin\Debug\net8.0\Application.deps.json
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\bin\Debug\net8.0\Application.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\bin\Debug\net8.0\Application.pdb
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\Application.AssemblyInfoInputs.cache
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\Application.AssemblyInfo.cs
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\Application.csproj.CoreCompileInputs.cache
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\Application.sourcelink.json
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\Application.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\refint\Application.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\Application.pdb
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Application\obj\Debug\net8.0\ref\Application.dll
