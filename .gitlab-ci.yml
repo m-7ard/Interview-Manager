@@ -5,7 +5,7 @@ stages:
 
 install_dependencies:
   stage: install
-  image: node:16
+  image: node:18
   script:
     - cd frontend
     - npm install
@@ -16,7 +16,7 @@ install_dependencies:
 
 run_tests:
   stage: test
-  image: node:16
+  image: node:18
   dependencies:
     - install_dependencies  # Ensure this job depends on the install step
   script:
@@ -26,7 +26,7 @@ run_tests:
 # Build the project
 build_project:
   stage: build
-  image: node:16
+  image: node:18
   script:
     - cd frontend
     - npm run build
