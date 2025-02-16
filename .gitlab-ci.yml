@@ -1,0 +1,35 @@
+stages:
+  - install
+  - test
+  - build
+
+install_dependencies:
+  stage: install
+  image: node:16
+  script:
+    - cd frontend
+    - npm install
+  artifacts:
+    paths:
+      - frontend/node_modules/
+    expire_in: 1 hour  # Optional: limit storage time
+
+run_tests:
+  stage: test
+  image: node:16
+  dependencies:
+    - install_dependencies  # Ensure this job depends on the install step
+  script:
+    - cd frontend
+    - npm run test -- --ci --silent --coverage
+
+# Build the project
+build_project:
+  stage: build
+  image: node:16
+  script:
+    - cd frontend
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build
