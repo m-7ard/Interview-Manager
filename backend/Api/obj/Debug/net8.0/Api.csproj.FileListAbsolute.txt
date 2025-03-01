@@ -32,3 +32,10 @@ C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\obj\
 C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\obj\Debug\net8.0\Api.pdb
 C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\obj\Debug\net8.0\Api.genruntimeconfig.cache
 C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\obj\Debug\net8.0\ref\Api.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\bin\Debug\net8.0\MediatR.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\bin\Debug\net8.0\MediatR.Contracts.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\bin\Debug\net8.0\OneOf.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\bin\Debug\net8.0\Application.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\bin\Debug\net8.0\Domain.dll
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\bin\Debug\net8.0\Application.pdb
+C:\Users\maxim\OneDrive\Escritorio\react_work\Interview-Manager\backend\Api\bin\Debug\net8.0\Domain.pdb
