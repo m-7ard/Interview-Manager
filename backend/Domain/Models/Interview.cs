@@ -1,6 +1,6 @@
 using Domain.Abstract;
-using Domain.Contracts.Interview.ValueObjects;
 using Domain.Contracts.Models.Interview;
+using Domain.Contracts.Models.Interview.ValueObjects;
 using Domain.ValueObjects.Interviews;
 using OneOf;
 

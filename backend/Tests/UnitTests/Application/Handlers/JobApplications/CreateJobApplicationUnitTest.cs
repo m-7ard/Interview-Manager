@@ -1,6 +1,5 @@
 using Application.Errors.Objects.Domains.JobApplications;
 using Application.Handlers.JobApplications.Create;
-using Application.Handlers.JobApplicationUpdates.Create;
 using Application.Interfaces.Repositories;
 using Moq;
 
@@ -51,6 +50,6 @@ public class CreateJobApplicationUnitTest
 
         // Assert
         Assert.True(result.IsError());
-        Assert.IsType<CannotCreateJobApplicationError>(result.GetError().First());
+        Assert.IsType<CannotCreateJobApplicationDomainError>(result.GetError().First());
     }
 }

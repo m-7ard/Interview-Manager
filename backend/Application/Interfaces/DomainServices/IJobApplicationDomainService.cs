@@ -1,11 +1,13 @@
-using Application.Utils;
+using Application.Errors;
 using Domain.Contracts.DomainServices.JobApplicationDomainService;
 using Domain.Models;
-using Domain.Utils;
+using OneOf;
 
 namespace Application.Interfaces.DomainServices;
 
-public interface IJobApplicationService
+public interface IJobApplicationDomainService
 {
-    public Task<IApplicationResult<bool>> TryAddUpdate(JobApplication jobApplication, CreateJobApplicationUpdateServiceContract contract);
+    public Task<OneOf<bool, ApplicationError>> TryAddUpdate(JobApplication jobApplication, AddJobApplicationUpdateServiceContract contract);
+    public Task<OneOf<JobApplication, ApplicationError>> TryGetJobApplicationById(Guid id);
+    public Task<OneOf<JobApplication, ApplicationError>> TryCreate(CreateJobApplicationServiceContract contract);
 } 

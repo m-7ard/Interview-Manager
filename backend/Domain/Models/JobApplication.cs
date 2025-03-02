@@ -32,7 +32,7 @@ public class JobApplication : AggregateRoot<JobApplicationId>
 
     private readonly HashSet<JobApplicationUpdateStatus> _allowedDuplicateUpdateStatus = [JobApplicationUpdateStatus.InterviewScheduled]; 
 
-    public static OneOf<bool, string> CanCreate(CreateJobApplicationContract contract)
+    public static OneOf<bool, string> CanCreate(CreateJobApplicationDomainContract contract)
     {
         var canCreateIdResult = JobApplicationId.CanCreate(contract.Id);
         if (canCreateIdResult.TryPickT1(out var error, out _))
@@ -48,7 +48,7 @@ public class JobApplication : AggregateRoot<JobApplicationId>
         return true;
     }
 
-    public static JobApplication ExecuteCreate(CreateJobApplicationContract contract)
+    public static JobApplication ExecuteCreate(CreateJobApplicationDomainContract contract)
     {
         var canCreateResult = CanCreate(contract);
         if (canCreateResult.TryPickT1(out var error, out _))
@@ -69,7 +69,7 @@ public class JobApplication : AggregateRoot<JobApplicationId>
         );
     }
 
-    public static IResult<JobApplication> TryCreate(CreateJobApplicationContract contract)
+    public static IResult<JobApplication> TryCreate(CreateJobApplicationDomainContract contract)
     {
         var canCreateResult = CanCreate(contract);
         if (canCreateResult.TryPickT1(out var error, out _))

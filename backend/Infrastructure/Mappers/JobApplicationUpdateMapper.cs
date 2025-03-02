@@ -1,4 +1,4 @@
-using Domain.Contracts.JobApplicationUpdate;
+using Domain.Contracts.Models.JobApplicationUpdate;
 using Domain.Models;
 using Infrastructure.DbEntities;
 

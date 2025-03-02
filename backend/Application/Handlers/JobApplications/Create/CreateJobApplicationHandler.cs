@@ -1,7 +1,9 @@
-using Application.Errors.Objects;
+using Application.Errors.Objects.Domains.JobApplications;
+using Application.Interfaces.DomainServices;
+using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
 using Application.Utils;
-using Domain.Contracts.JobApplication;
+using Domain.Contracts.Models.JobApplication;
 using Domain.Models;
 using MediatR;
 
@@ -9,31 +11,24 @@ namespace Application.Handlers.JobApplications.Create;
 
 public class CreateJobApplicationHandler : IRequestHandler<CreateJobApplicationCommand, OneOfHandlerResult<CreateJobApplicationResult>>
 {
-    private readonly IJobApplicationRepository _jobApplicationRepository;
+    private readonly IJobApplicationDomainService _jobApplicationDomainService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateJobApplicationHandler(IJobApplicationRepository jobApplicationRepository)
+    public CreateJobApplicationHandler(IJobApplicationDomainService jobApplicationDomainService, IUnitOfWork unitOfWork)
     {
-        _jobApplicationRepository = jobApplicationRepository;
+        _jobApplicationDomainService = jobApplicationDomainService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<OneOfHandlerResult<CreateJobApplicationResult>> Handle(CreateJobApplicationCommand request, CancellationToken cancellationToken)
     {
-        var contract = new CreateJobApplicationContract(
-            id: request.Id,
-            url: request.Url,
-            resume: request.Resume,
-            dateCreated: request.DateCreated,
-            title: request.Title,
-            company: request.Company
-        );
+        // Can Create
 
-        var tryCreateJobApplicationResult = JobApplication.TryCreate(contract);
-        if (tryCreateJobApplicationResult.IsError())
-        {
-            return new CannotCreateJobApplicationError(message: tryCreateJobApplicationResult.GetError(), path: []);
-        }
+        _jobApplicationDomainService.
 
         await _jobApplicationRepository.CreateAsync(tryCreateJobApplicationResult.GetValue());
+        await _un
+
         return new CreateJobApplicationResult();
     }
 }

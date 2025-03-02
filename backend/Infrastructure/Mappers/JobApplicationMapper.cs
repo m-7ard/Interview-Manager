@@ -1,4 +1,4 @@
-using Domain.Contracts.JobApplication;
+using Domain.Contracts.Models.JobApplication;
 using Domain.Models;
 using Infrastructure.DbEntities;
 
@@ -8,7 +8,7 @@ public static class JobApplicationMapper
 {
     public static JobApplication DbEntityToDomain(JobApplicationDbEntity source)
     {
-        var contract = new CreateJobApplicationContract(
+        var contract = new CreateJobApplicationDomainContract(
             id: source.Id,
             url: source.Url,
             resume: source.Resume,

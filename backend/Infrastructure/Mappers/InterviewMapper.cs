@@ -1,4 +1,4 @@
-using Domain.Contracts.Interview;
+using Domain.Contracts.Models.Interview;
 using Domain.Models;
 using Infrastructure.DbEntities;
 

@@ -1,8 +1,8 @@
-namespace Domain.Contracts.Models.JobApplication;
+namespace Domain.Contracts.DomainServices.JobApplicationDomainService;
 
-public class CreateJobApplicationContract
+public class CreateJobApplicationServiceContract
 {
-    public CreateJobApplicationContract(Guid id, string url, string resume, DateTime dateCreated, string title, string company)
+    public CreateJobApplicationServiceContract(Guid id, string url, string resume, DateTime dateCreated, string title, string company)
     {
         Id = id;
         Url = url;

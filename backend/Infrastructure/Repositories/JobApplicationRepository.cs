@@ -1,6 +1,7 @@
 using Application.Interfaces.Repositories;
 using Domain.DomainEvents.JobApplicationUpdates;
 using Domain.Models;
+using Domain.ValueObjects.JobApplication;
 using Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,5 +43,11 @@ public class JobApplicationRepository : IJobApplicationRepository
         var trackedEntity = await _dbContext.JobApplications.SingleAsync(d => d.Id == writeEntity.Id);
         _dbContext.Entry(trackedEntity).CurrentValues.SetValues(writeEntity);
         await PersistDomainEvents(jobApplication);
+    }
+
+    public async Task<JobApplication?> GetByIdAsync(JobApplicationId id)
+    {
+        var dbEntity = await _dbContext.JobApplications.SingleOrDefaultAsync(d => d.Id == id.Value);
+        return dbEntity is null ? null : JobApplicationMapper.DbEntityToDomain(dbEntity);
     }
 }

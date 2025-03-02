@@ -1,8 +1,8 @@
 namespace Domain.Contracts.DomainServices.JobApplicationDomainService;
 
-public class CreateJobApplicationUpdateServiceContract
+public class AddJobApplicationUpdateServiceContract
 {
-    public CreateJobApplicationUpdateServiceContract(Guid id, string status, DateTime dateOccured)
+    public AddJobApplicationUpdateServiceContract(Guid id, string status, DateTime dateOccured)
     {
         Id = id;
         Status = status;
