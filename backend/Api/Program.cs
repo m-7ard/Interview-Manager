@@ -1,6 +1,7 @@
 using System.Globalization;
 using Api.Services;
 using Api.Validators.JobApplications;
+using Application.Common;
 using Application.Handlers.JobApplications.Create;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Repositories;
@@ -9,6 +10,7 @@ using Infrastructure;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 // dotnet ef migrations add <Name> --project Infrastructure --startup-project Api
 
@@ -112,3 +114,62 @@ builder.Services.AddScoped<IJobApplicationRepository>();
 /// 
 
 builder.Services.AddValidatorsFromAssembly(typeof(CreateJobApplicationValidator).Assembly);
+
+builder.Services.AddAuthorization();
+builder.Services.AddDirectoryBrowser(); // For media
+
+var app = builder.Build();
+
+app.UseRequestLocalization();
+
+///
+///
+/// Startup behaviour
+/// 
+
+using (var scope = app.Services.CreateScope())
+{
+    var localService = scope.ServiceProvider;
+    var context = localService.GetRequiredService<MainDbContext>();
+
+    try
+    {
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+    }
+    catch (Exception ex)
+    {
+        var logger = localService.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while resetting the database.");
+    }
+}
+
+
+app.UseCors(apiCorsPolicy);
+app.UseAuthentication();
+app.UseAuthorization();
+
+///
+///
+/// Media config
+/// 
+
+var mediaProvider = new PhysicalFileProvider(DirectoryService.GetMediaDirectory());
+
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = mediaProvider,
+    RequestPath = "/media",
+    EnableDirectoryBrowsing = true
+});
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapFallbackToFile("react/index.html");
+
+app.UseHttpsRedirection();
+app.MapControllers();
+
+app.Run();
+
+public partial class Program {  }
