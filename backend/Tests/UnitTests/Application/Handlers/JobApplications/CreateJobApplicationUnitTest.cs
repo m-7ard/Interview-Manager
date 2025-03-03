@@ -1,5 +1,7 @@
 using Application.Errors.Objects.Domains.JobApplications;
 using Application.Handlers.JobApplications.Create;
+using Application.Interfaces.DomainServices;
+using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
 using Moq;
 
@@ -7,16 +9,23 @@ namespace Tests.UnitTests.Application.Handlers.JobApplications;
 
 public class CreateJobApplicationUnitTest
 {
-    private readonly Mock<IJobApplicationRepository> _mockJobApplicationRepository;
+    private readonly Mock<IJobApplicationDomainService> _mockJobApplicationDomainService;
+    private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly CreateJobApplicationHandler _handler;
     private readonly CreateJobApplicationCommand _defaultRequest;
 
     public CreateJobApplicationUnitTest()
     {
-        _mockJobApplicationRepository = new Mock<IJobApplicationRepository>();
+        _mockUnitOfWork = new Mock<IUnitOfWork>();
+        _mockUnitOfWork.Setup(uow => uow.JobApplicationRepository).Returns(new Mock<IJobApplicationRepository>().Object);
+
+        _mockJobApplicationDomainService = new Mock<IJobApplicationDomainService>();
+
         _handler = new CreateJobApplicationHandler(
-            jobApplicationRepository: _mockJobApplicationRepository.Object
+            jobApplicationDomainService: _mockJobApplicationDomainService.Object,
+            unitOfWork: _mockUnitOfWork.Object
         );
+        
         _defaultRequest = new CreateJobApplicationCommand(
             id: Guid.NewGuid(),
             url: "url",

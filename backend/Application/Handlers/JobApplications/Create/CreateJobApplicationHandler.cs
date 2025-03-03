@@ -1,10 +1,8 @@
-using Application.Errors.Objects.Domains.JobApplications;
+using Application.Errors.Objects.Services.JobApplicationDomainService;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
-using Application.Interfaces.Repositories;
 using Application.Utils;
-using Domain.Contracts.Models.JobApplication;
-using Domain.Models;
+using Domain.Contracts.DomainServices.JobApplicationDomainService;
 using MediatR;
 
 namespace Application.Handlers.JobApplications.Create;
@@ -23,11 +21,11 @@ public class CreateJobApplicationHandler : IRequestHandler<CreateJobApplicationC
     public async Task<OneOfHandlerResult<CreateJobApplicationResult>> Handle(CreateJobApplicationCommand request, CancellationToken cancellationToken)
     {
         // Can Create
+        var canCreate = await _jobApplicationDomainService.TryCreate(new CreateJobApplicationServiceContract(id: request.Id, url: request.Url, resume: request.Resume, dateCreated: request.DateCreated, title: request.Title, company: request.Company));
+        if (canCreate.IsT1) return new CannotCreateJobApplicationServiceError(message: canCreate.AsT1.Message).AsList();
 
-        _jobApplicationDomainService.
-
-        await _jobApplicationRepository.CreateAsync(tryCreateJobApplicationResult.GetValue());
-        await _un
+        // Persist
+        await _unitOfWork.SaveAsync();
 
         return new CreateJobApplicationResult();
     }

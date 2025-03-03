@@ -1,44 +1,114 @@
+using System.Globalization;
+using Api.Services;
+using Api.Validators.JobApplications;
+using Application.Handlers.JobApplications.Create;
+using Application.Interfaces.DomainServices;
+using Application.Interfaces.Repositories;
+using FluentValidation;
+using Infrastructure;
+using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+
+// dotnet ef migrations add <Name> --project Infrastructure --startup-project Api
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var appSettings = BuilderUtils.ReadAppSettings(builder.Configuration);
+var databaseProviderSingleton = new DatabaseProviderSingleton(appSettings.DatabaseProviderValue);
 
-var app = builder.Build();
+///
+///
+/// DB / database / dbcontext
+/// 
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+builder.Services.AddDbContext<MainDbContext>(options =>
+    {
+        if (databaseProviderSingleton.IsSQLite)
+        {
+            options.UseSqlite(appSettings.ConnectionString);
+        }
+        if (databaseProviderSingleton.IsMySQL)
+        {
+            options.UseMySql(appSettings.ConnectionString, MySqlServerVersion.LatestSupportedServerVersion);
+        }
+        else
+        {
+            throw new InvalidOperationException("Unsupported database provider.");
+        }
+    }
+);
+
+var services = builder.Services;
+
+///
+///
+/// Localisation
+/// 
+
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+    services.Configure<RequestLocalizationOptions>(options =>
+    {
+        var supportedCultures = new[] { new CultureInfo("en-US") };
+        options.DefaultRequestCulture = new RequestCulture("en-US");
+        options.SupportedCultures = supportedCultures;
+        options.SupportedUICultures = supportedCultures;
+    });
+
+    services.AddControllers()
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        })
+        .AddViewLocalization()
+        .AddDataAnnotationsLocalization();
 }
 
-app.UseHttpsRedirection();
+///
+///
+/// React Cors
+/// 
 
-var summaries = new[]
+var apiCorsPolicy = "AllowReactApp";
+services.AddCors(options =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    options.AddPolicy(apiCorsPolicy,
+        builder =>
+        {
+            builder.WithOrigins("*") // React app URL "http://localhost:5173"
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .AllowAnyHeader();
+        });
+});
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
 
-app.Run();
+///
+///
+/// Mediatr
+/// 
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateJobApplicationCommand).Assembly));
+
+///
+///
+/// Dependency Injection / DI / Services
+/// 
+
+builder.Services.AddSingleton<IDatabaseProviderSingleton>(databaseProviderSingleton);
+
+// Domain Services
+builder.Services.AddScoped<IJobApplicationDomainService>();
+
+// Repositories
+builder.Services.AddScoped<IJobApplicationRepository>();
+
+///
+///
+/// Fluent Validation DI / Dependency Injection
+/// 
+
+builder.Services.AddValidatorsFromAssembly(typeof(CreateJobApplicationValidator).Assembly);

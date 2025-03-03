@@ -28,6 +28,9 @@
             "projectReferences": {
               "C:\\Users\\maxim\\OneDrive\\Escritorio\\react_work\\Interview-Manager\\backend\\Application\\Application.csproj": {
                 "projectPath": "C:\\Users\\maxim\\OneDrive\\Escritorio\\react_work\\Interview-Manager\\backend\\Application\\Application.csproj"
+              },
+              "C:\\Users\\maxim\\OneDrive\\Escritorio\\react_work\\Interview-Manager\\backend\\Infrastructure\\Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\maxim\\OneDrive\\Escritorio\\react_work\\Interview-Manager\\backend\\Infrastructure\\Infrastructure.csproj"
               }
             }
           }
@@ -50,6 +53,26 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.6, )"
+            },
+            "Microsoft.Data.Sqlite": {
+              "target": "Package",
+              "version": "[9.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[8.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.13, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -122,9 +145,21 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[11.11.0, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[11.11.0, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.4.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             }
           },
           "imports": [
@@ -256,17 +291,17 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[9.0.2, )"
+              "version": "[8.0.13, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.2, )"
+              "version": "[8.0.13, )"
             },
             "Microsoft.EntityFrameworkCore.Relational": {
               "target": "Package",
-              "version": "[9.0.2, )"
+              "version": "[8.0.13, )"
             }
           },
           "imports": [
