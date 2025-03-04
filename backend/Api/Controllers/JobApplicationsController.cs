@@ -38,9 +38,39 @@ public class ProductsController : ControllerBase
             id: id,
             url: request.Url,
             resume: request.Resume,
-            dateCreated: DateTime.UtcNow,
             title: request.Title,
-            company: request.Company
+            company: request.Company,
+            datePublished: request.DatePublished
+        );
+        var result = await _mediator.Send(command);
+
+        if (result.IsError())
+        {
+            return BadRequest(ApiErrorService.MapApplicationErrors(errors: result.GetError()));
+        }
+        
+        return StatusCode(StatusCodes.Status201Created, new CreateJobApplicationResponseDTO(id: id.ToString()));
+    }
+
+    [HttpPost("{id}/schedule-interview")]
+    public async Task<IActionResult> ScheduleInterview(CreateJobApplicationRequestDTO request)
+    {
+        var validation = _createJobApplicationValidator.Validate(request);
+        
+        if (!validation.IsValid)
+        {
+            return BadRequest(ApiErrorService.FluentToApiErrors(validationFailures: validation.Errors, []));
+        }
+
+        var id = Guid.NewGuid();
+
+        var command = new CreateJobApplicationCommand(
+            id: id,
+            url: request.Url,
+            resume: request.Resume,
+            title: request.Title,
+            company: request.Company,
+            datePublished: request.DatePublished
         );
         var result = await _mediator.Send(command);
 

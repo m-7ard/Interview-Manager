@@ -6,7 +6,7 @@ using Application.Errors.Objects.Services.JobApplicationDomainService;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
 using Domain.Contracts.DomainServices.JobApplicationDomainService;
-using Domain.Contracts.Models.JobApplication;
+using Domain.Contracts.Models.JobApplications;
 using Domain.Contracts.Models.JobApplicationUpdate;
 using Domain.Models;
 using Domain.ValueObjects.JobApplication;
@@ -50,7 +50,7 @@ public class JobApplicationService : IJobApplicationDomainService
             id: contract.Id,
             url: contract.Url,
             resume: contract.Resume,
-            dateCreated: contract.DateCreated,
+            datePublished: contract.DatePublished,
             title: contract.Title,
             company: contract.Company
         );

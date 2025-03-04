@@ -1,7 +1,8 @@
 using Domain.Abstract;
-using Domain.Contracts.Models.JobApplication;
+using Domain.Contracts.Models.JobApplications;
 using Domain.Contracts.Models.JobApplicationUpdate;
 using Domain.Utils;
+using Domain.ValueObjects.Common;
 using Domain.ValueObjects.JobApplication;
 using Domain.ValueObjects.JobApplicationUpdate;
 using OneOf;
@@ -10,7 +11,7 @@ namespace Domain.Models;
 
 public class JobApplication : AggregateRoot<JobApplicationId>
 {
-    public JobApplication(JobApplicationId id, string url, string resume, DateTime dateCreated, List<JobApplicationUpdate> updates, string title, string company) : base(id)
+    public JobApplication(JobApplicationId id, string url, string resume, DateTime dateCreated, List<JobApplicationUpdate> updates, string title, string company, DateTime datePublished) : base(id)
     {
         Id = id;
         Url = url;
@@ -21,6 +22,7 @@ public class JobApplication : AggregateRoot<JobApplicationId>
         Updates.Sort();
         Title = title;
         Company = company;
+        DatePublished = datePublished;
     }
 
     public string Url { get; set; }
@@ -29,6 +31,7 @@ public class JobApplication : AggregateRoot<JobApplicationId>
     public List<JobApplicationUpdate> Updates { get; set; }
     public string Title { get; set; }
     public string Company { get; set; }
+    public DateTime DatePublished { get; set; }
 
     private readonly HashSet<JobApplicationUpdateStatus> _allowedDuplicateUpdateStatus = [JobApplicationUpdateStatus.InterviewScheduled]; 
 
@@ -40,9 +43,9 @@ public class JobApplication : AggregateRoot<JobApplicationId>
             return error;
         } 
 
-        if (contract.DateCreated > DateTime.UtcNow)
+        if (contract.DatePublished > DateTime.UtcNow)
         {
-            return $"Date Created ({contract.DateCreated}) cannot be larger than current date.";
+            return $"Date Published ({contract.DatePublished}) cannot be larger than current date.";
         }
 
         return true;
@@ -62,10 +65,11 @@ public class JobApplication : AggregateRoot<JobApplicationId>
             id: id, 
             url: contract.Url, 
             resume: contract.Resume, 
-            dateCreated: contract.DateCreated, 
+            dateCreated: DateTime.UtcNow, 
             updates: [], 
             title: contract.Title, 
-            company: contract.Company
+            company: contract.Company,
+            datePublished: contract.DatePublished
         );
     }
 
@@ -114,5 +118,15 @@ public class JobApplication : AggregateRoot<JobApplicationId>
     public JobApplicationUpdate? GetLatestUpdate()
     {
         return Updates.Last();
+    }
+
+    public OneOfDomainResult<bool> CanBeScheduledForInterview(InterviewInfo interviewInfo)
+    {
+        if (interviewInfo.DateScheduled < DatePublished)
+        {
+            return $"The Interview's Date Scheduled ({interviewInfo.DateScheduled}) cannot be less than the Job Applications Date Published ({DatePublished})";
+        }
+
+        return true;
     }
 }

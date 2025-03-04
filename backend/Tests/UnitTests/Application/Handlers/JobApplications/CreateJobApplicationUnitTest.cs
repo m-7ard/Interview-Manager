@@ -1,8 +1,11 @@
 using Application.Errors.Objects.Domains.JobApplications;
+using Application.Errors.Objects.Services.JobApplicationDomainService;
 using Application.Handlers.JobApplications.Create;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
+using Domain.Contracts.DomainServices.JobApplicationDomainService;
+using Domain.Models;
 using Moq;
 
 namespace Tests.UnitTests.Application.Handlers.JobApplications;
@@ -13,6 +16,7 @@ public class CreateJobApplicationUnitTest
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly CreateJobApplicationHandler _handler;
     private readonly CreateJobApplicationCommand _defaultRequest;
+    private readonly JobApplication _jobApplication;
 
     public CreateJobApplicationUnitTest()
     {
@@ -30,16 +34,19 @@ public class CreateJobApplicationUnitTest
             id: Guid.NewGuid(),
             url: "url",
             resume: "resume",
-            dateCreated: DateTime.UtcNow,
             title: "title",
-            company: "company" 
+            company: "company",
+            datePublished: DateTime.UtcNow
         );
+
+        _jobApplication = Mixins.CreateJobApplication(1);
     }
 
     [Fact]
     public async Task CreateJobApplication_ValidData_Success()
     {
         // Arrage
+        _mockJobApplicationDomainService.Setup(service => service.TryCreate(It.IsAny<CreateJobApplicationServiceContract>())).ReturnsAsync(_jobApplication);
 
         // Act
         var result = await _handler.Handle(_defaultRequest, CancellationToken.None);
@@ -49,16 +56,16 @@ public class CreateJobApplicationUnitTest
     }
 
     [Fact]
-    public async Task CreateJobApplication_FutureDateCreated_Failure()
+    public async Task CreateJobApplication_CannotCreate_Failure()
     {
         // Arrage
-        _defaultRequest.DateCreated = DateTime.UtcNow.AddMinutes(1);
+        _mockJobApplicationDomainService.Setup(service => service.TryCreate(It.IsAny<CreateJobApplicationServiceContract>())).ReturnsAsync(MockValues.EmptyApplicationError);
 
         // Act
         var result = await _handler.Handle(_defaultRequest, CancellationToken.None);
 
         // Assert
         Assert.True(result.IsError());
-        Assert.IsType<CannotCreateJobApplicationDomainError>(result.GetError().First());
+        Assert.IsType<CannotCreateJobApplicationServiceError>(result.GetError().First());
     }
 }

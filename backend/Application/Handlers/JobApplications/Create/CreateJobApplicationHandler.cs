@@ -20,9 +20,9 @@ public class CreateJobApplicationHandler : IRequestHandler<CreateJobApplicationC
 
     public async Task<OneOfHandlerResult<CreateJobApplicationResult>> Handle(CreateJobApplicationCommand request, CancellationToken cancellationToken)
     {
-        // Can Create
-        var canCreate = await _jobApplicationDomainService.TryCreate(new CreateJobApplicationServiceContract(id: request.Id, url: request.Url, resume: request.Resume, dateCreated: request.DateCreated, title: request.Title, company: request.Company));
-        if (canCreate.IsT1) return new CannotCreateJobApplicationServiceError(message: canCreate.AsT1.Message).AsList();
+        // Try Create
+        var tryCreate = await _jobApplicationDomainService.TryCreate(new CreateJobApplicationServiceContract(id: request.Id, url: request.Url, resume: request.Resume, datePublished: request.DatePublished, title: request.Title, company: request.Company));
+        if (tryCreate.IsT1) return new CannotCreateJobApplicationServiceError(message: tryCreate.AsT1.Message).AsList();
 
         // Persist
         await _unitOfWork.SaveAsync();
