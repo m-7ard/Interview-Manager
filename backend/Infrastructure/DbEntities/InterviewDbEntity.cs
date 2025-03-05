@@ -2,7 +2,7 @@ namespace Infrastructure.DbEntities;
 
 public class InterviewDbEntity
 {
-    public InterviewDbEntity(Guid id, string? venue, string status, DateTime dateScheduled, DateTime? dateStarted, DateTime? dateFinished, string interviewer)
+    public InterviewDbEntity(Guid id, string? venue, string status, DateTime dateScheduled, DateTime? dateStarted, DateTime? dateFinished, string interviewer, Guid jobApplicationId)
     {
         Id = id;
         Venue = venue;
@@ -11,6 +11,7 @@ public class InterviewDbEntity
         DateStarted = dateStarted;
         DateFinished = dateFinished;
         Interviewer = interviewer;
+        JobApplicationId = jobApplicationId;
     }
 
     public Guid Id { get; set; }
@@ -20,4 +21,7 @@ public class InterviewDbEntity
     public DateTime? DateStarted { get; set; }
     public DateTime? DateFinished { get; set; }
     public string Interviewer { get; set; }
+    
+    public Guid JobApplicationId { get; set; }
+    public JobApplicationDbEntity JobApplication { get; private set; } = null!;
 }

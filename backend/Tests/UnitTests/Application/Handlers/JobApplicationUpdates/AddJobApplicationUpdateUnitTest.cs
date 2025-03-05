@@ -1,4 +1,4 @@
-using Application.Errors.Objects.Services.JobApplicationDomainService;
+using Application.Errors.Objects.Application.JobApplications;
 using Application.Handlers.JobApplicationUpdates.Add;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
@@ -65,7 +65,7 @@ public class AddJobApplicationUpdateUnitTest
 
         // Assert
         Assert.True(result.IsError());
-        Assert.IsType<JobApplicationDoesNotExistServiceError>(result.GetError().First());
+        Assert.IsType<JobApplicationDoesNotExist>(result.GetError().First());
     }
 
     [Fact]
@@ -80,6 +80,6 @@ public class AddJobApplicationUpdateUnitTest
 
         // Assert
         Assert.True(result.IsError());
-        Assert.IsType<CannotAddJobApplicationUpdateDomainError>(result.GetError().First());
+        Assert.IsType<CannotAddJobApplicationUpdateError>(result.GetError().First());
     }
 }

@@ -1,11 +1,9 @@
-using Application.Errors.Objects.Domains.Interviews;
-using Application.Errors.Objects.Services.JobApplicationDomainService;
+using Application.Errors.Objects.Application.Interviews;
+using Application.Errors.Objects.Application.JobApplications;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
 using Application.Utils;
 using Domain.Contracts.DomainServices.InterviewDomainService;
-using Domain.Contracts.DomainServices.JobApplicationDomainService;
-using Domain.ValueObjects.Common;
 using MediatR;
 
 namespace Application.Handlers.Interviews.Create;
@@ -27,17 +25,13 @@ public class CreateInterviewHandler : IRequestHandler<CreateInterviewCommand, On
     {
         // Job Application Exists
         var doesExist = await _jobApplicationDomainService.TryGetJobApplicationById(request.JobApplicationId);
-        if (doesExist.IsT1) return new JobApplicationDoesNotExistServiceError(message: doesExist.AsT1.Message).AsList();
+        if (doesExist.IsT1) return new JobApplicationDoesNotExist(message: doesExist.AsT1.Message).AsList();
 
         var jobApplication = doesExist.AsT0;
 
-        // Can Schedule
-        var canSchedule = jobApplication.CanBeScheduledForInterview(new InterviewInfo(dateScheduled: request.DateScheduled, dateStarted: request.DateStarted, dateFinished: request.DateFinished));
-        if (canSchedule.IsError()) return new CannotBeScheduledForInterviewError(message: canSchedule.GetError()).AsList();
-
         // Try Create
-        var tryCreate = await _interviewDomainService.TryCreateInterview(new CreateInterviewServiceContract(id: request.Id, venue: request.Venue, status: request.Status, dateScheduled: request.DateScheduled, dateStarted: request.DateScheduled, dateFinished: request.DateFinished, jobApplication: jobApplication, interviewer: request.Interviewer));
-        if (tryCreate.IsT1) return new CannotCreateJobApplicationServiceError(message: tryCreate.AsT1.Message).AsList();
+        var tryCreate = await _interviewDomainService.TryCreateInterview(jobApplication: jobApplication, new CreateInterviewServiceContract(id: request.Id, venue: request.Venue, status: request.Status, dateScheduled: request.DateScheduled, dateStarted: request.DateScheduled, dateFinished: request.DateFinished, interviewer: request.Interviewer));
+        if (tryCreate.IsT1) return new CannotCreateInterviewError(message: tryCreate.AsT1.Message).AsList();
 
         // Persist
         await _unitOfWork.SaveAsync();

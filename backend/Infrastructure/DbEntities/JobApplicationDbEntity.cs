@@ -2,7 +2,7 @@ namespace Infrastructure.DbEntities;
 
 public class JobApplicationDbEntity
 {
-    public JobApplicationDbEntity(Guid id, string url, string resume, DateTime dateCreated, List<JobApplicationUpdateDbEntity> updates, string title, string company)
+    public JobApplicationDbEntity(Guid id, string url, string resume, DateTime dateCreated, List<JobApplicationUpdateDbEntity> updates, string title, string company, DateTime datePublished)
     {
         Id = id;
         Url = url;
@@ -11,6 +11,7 @@ public class JobApplicationDbEntity
         Updates = updates;
         Title = title;
         Company = company;
+        DatePublished = datePublished;
     }
 
     public Guid Id { get; set; }
@@ -20,4 +21,5 @@ public class JobApplicationDbEntity
     public List<JobApplicationUpdateDbEntity> Updates { get; set; } = [];
     public string Title { get; set; }
     public string Company { get; set; }
+    public DateTime DatePublished { get; set; }
 }

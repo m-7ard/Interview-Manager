@@ -1,10 +1,10 @@
-using Domain.Models;
+using Domain.ValueObjects.JobApplication;
 
 namespace Domain.Contracts.DomainServices.InterviewDomainService;
 
 public class CreateInterviewServiceContract
 {
-    public CreateInterviewServiceContract(Guid id, string venue, string status, DateTime dateScheduled, DateTime? dateStarted, DateTime? dateFinished, JobApplication jobApplication, string interviewer)
+    public CreateInterviewServiceContract(Guid id, string venue, string status, DateTime dateScheduled, DateTime? dateStarted, DateTime? dateFinished, string interviewer)
     {
         Id = id;
         Venue = venue;
@@ -12,7 +12,6 @@ public class CreateInterviewServiceContract
         DateScheduled = dateScheduled;
         DateStarted = dateStarted;
         DateFinished = dateFinished;
-        JobApplication = jobApplication;
         Interviewer = interviewer;
     }
 
@@ -22,6 +21,5 @@ public class CreateInterviewServiceContract
     public DateTime DateScheduled { get; set; }
     public DateTime? DateStarted { get; set; }
     public DateTime? DateFinished { get; set; }
-    public JobApplication JobApplication { get; set; }
     public string Interviewer { get; set; }
 }

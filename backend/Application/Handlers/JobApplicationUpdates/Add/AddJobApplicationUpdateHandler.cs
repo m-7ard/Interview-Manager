@@ -1,4 +1,4 @@
-using Application.Errors.Objects.Services.JobApplicationDomainService;
+using Application.Errors.Objects.Application.JobApplications;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
 using Application.Utils;
@@ -22,13 +22,13 @@ public class AddJobApplicationUpdateHandler : IRequestHandler<AddJobApplicationU
     {
         // Exists
         var jobApplicationExists = await _jobApplicationDomainService.TryGetJobApplicationById(request.JobApplicationId);
-        if (jobApplicationExists.IsT1) return new JobApplicationDoesNotExistServiceError(message: jobApplicationExists.AsT1.Message).AsList();
+        if (jobApplicationExists.IsT1) return new JobApplicationDoesNotExist(message: jobApplicationExists.AsT1.Message).AsList();
 
         var jobApplication = jobApplicationExists.AsT0;
 
         // Add
         var tryAdd = await _jobApplicationDomainService.TryAddUpdate(jobApplication, new AddJobApplicationUpdateServiceContract(id: request.JobApplicationUpdateId, status: request.Status, dateOccured: request.DateOccured));
-        if (tryAdd.IsT1) return new CannotAddJobApplicationUpdateDomainError(message: tryAdd.AsT1.Message).AsList();
+        if (tryAdd.IsT1) return new CannotAddJobApplicationUpdateError(message: tryAdd.AsT1.Message).AsList();
 
         // Persist
         await _unitOfWork.JobApplicationRepository.UpdateAsync(jobApplication);

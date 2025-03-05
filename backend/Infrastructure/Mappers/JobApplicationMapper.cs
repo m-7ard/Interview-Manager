@@ -1,4 +1,4 @@
-using Domain.Contracts.Models.JobApplication;
+using Domain.Contracts.Models.JobApplications;
 using Domain.Models;
 using Infrastructure.DbEntities;
 
@@ -12,9 +12,10 @@ public static class JobApplicationMapper
             id: source.Id,
             url: source.Url,
             resume: source.Resume,
-            dateCreated: source.DateCreated,
             title: source.Title,
-            company: source.Company
+            company: source.Company,
+            datePublished: source.DatePublished,
+            dateCreated: source.DateCreated
         );
 
         return JobApplication.ExecuteCreate(contract);
@@ -29,7 +30,8 @@ public static class JobApplicationMapper
             dateCreated: source.DateCreated,
             updates: source.Updates.Select(JobApplicationUpdateMapper.DomainToDbEntity).ToList(),
             title: source.Title,
-            company: source.Company
+            company: source.Company,
+            datePublished: source.DatePublished
         );
     }
 }

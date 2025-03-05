@@ -1,5 +1,6 @@
 using Domain.Contracts.Models.Interview;
 using Domain.Models;
+using Domain.ValueObjects.JobApplication;
 using Infrastructure.DbEntities;
 
 namespace Infrastructure.Mappers;
@@ -15,7 +16,8 @@ public static class InterviewMapper
             dateScheduled: source.DateScheduled,
             dateStarted: source.DateStarted,
             dateFinished: source.DateFinished,
-            interviewer: source.Interviewer
+            interviewer: source.Interviewer,
+            jobApplicationId: JobApplicationId.ExecuteCreate(source.JobApplicationId)
         );
 
         return Interview.ExecuteCreate(contract);
@@ -30,7 +32,8 @@ public static class InterviewMapper
             dateScheduled: source.Schedule.Dates.DateScheduled,
             dateStarted: source.Schedule.Dates.DateStarted,
             dateFinished: source.Schedule.Dates.DateFinished,
-            interviewer: source.Interviewer
+            interviewer: source.Interviewer,
+            jobApplicationId: source.JobApplicationId.Value
         );
     }
 }

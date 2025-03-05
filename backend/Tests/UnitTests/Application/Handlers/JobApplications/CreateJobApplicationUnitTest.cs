@@ -1,4 +1,3 @@
-using Application.Errors.Objects.Domains.JobApplications;
 using Application.Errors.Objects.Services.JobApplicationDomainService;
 using Application.Handlers.JobApplications.Create;
 using Application.Interfaces.DomainServices;

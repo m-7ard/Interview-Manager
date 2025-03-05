@@ -16,13 +16,6 @@ public class InterviewDates
 
     public static OneOf<bool, string> CanCreate(CreateInterviewDatesContract contract)
     {
-        var currentDate = DateTime.UtcNow;
-
-        if (contract.DateScheduled < currentDate)
-        {
-            return $"Date scheduled ({contract.DateScheduled}) cannot be in the past.";
-        }
-
         if (contract.DateStarted is not null && contract.DateStarted < contract.DateScheduled)
         {
             return $"Date started ({contract.DateStarted}) cannot be before the scheduled date ({contract.DateScheduled}).";
