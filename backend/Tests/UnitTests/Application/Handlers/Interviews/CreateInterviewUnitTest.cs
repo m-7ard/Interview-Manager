@@ -1,19 +1,15 @@
 using Application.Errors.Objects.Application.Interviews;
 using Application.Errors.Objects.Application.JobApplications;
-using Application.Errors.Objects.Services.JobApplicationDomainService;
 using Application.Handlers.Interviews.Create;
-using Application.Handlers.Interviews.Update;
-using Application.Handlers.JobApplications.Create;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
 using Domain.Contracts.DomainServices.InterviewDomainService;
-using Domain.Contracts.DomainServices.JobApplicationDomainService;
 using Domain.Models;
 using Domain.ValueObjects.Interviews;
 using Moq;
 
-namespace Tests.UnitTests.Application.Handlers.JobApplications;
+namespace Tests.UnitTests.Application.Handlers.Interviews;
 
 public class CreateInterviewUnitTest
 {
@@ -57,7 +53,7 @@ public class CreateInterviewUnitTest
     }
 
     [Fact]
-    public async Task CreateJobApplication_ValidData_Success()
+    public async Task CreateInterview_ValidData_Success()
     {
         // Arrage
         _mockJobApplicationDomainService.Setup(service => service.TryGetJobApplicationById(It.IsAny<Guid>())).ReturnsAsync(_jobApplication);
@@ -71,7 +67,7 @@ public class CreateInterviewUnitTest
     }
 
     [Fact]
-    public async Task CreateJobApplication_JobApplicationDoesNotExist_Failure()
+    public async Task CreateInterview_JobApplicationDoesNotExist_Failure()
     {
         // Arrage
         _mockJobApplicationDomainService.Setup(service => service.TryGetJobApplicationById(It.IsAny<Guid>())).ReturnsAsync(MockValues.EmptyApplicationError);
@@ -85,7 +81,7 @@ public class CreateInterviewUnitTest
     }
 
     [Fact]
-    public async Task CreateJobApplication_CannotCreateInterview_Failure()
+    public async Task CreateInterview_CannotCreateInterview_Failure()
     {
         // Arrage
         _mockJobApplicationDomainService.Setup(service => service.TryGetJobApplicationById(It.IsAny<Guid>())).ReturnsAsync(_jobApplication);

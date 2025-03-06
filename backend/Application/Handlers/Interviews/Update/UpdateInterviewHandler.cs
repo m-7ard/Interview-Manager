@@ -1,5 +1,4 @@
 using Application.Errors.Objects.Application.Interviews;
-using Application.Errors.Objects.Application.JobApplications;
 using Application.Interfaces.DomainServices;
 using Application.Interfaces.Persistence;
 using Application.Utils;
@@ -12,13 +11,11 @@ public class UpdateInterviewHandler : IRequestHandler<UpdateInterviewCommand, On
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IInterviewDomainService _interviewDomainService;
-    private readonly IJobApplicationDomainService _jobApplicationDomainService;
 
-    public UpdateInterviewHandler(IUnitOfWork unitOfWork, IInterviewDomainService interviewDomainService, IJobApplicationDomainService jobApplicationDomainService)
+    public UpdateInterviewHandler(IUnitOfWork unitOfWork, IInterviewDomainService interviewDomainService)
     {
         _unitOfWork = unitOfWork;
         _interviewDomainService = interviewDomainService;
-        _jobApplicationDomainService = jobApplicationDomainService;
     }
 
     public async Task<OneOfHandlerResult<UpdateInterviewResult>> Handle(UpdateInterviewCommand request, CancellationToken cancellationToken)
